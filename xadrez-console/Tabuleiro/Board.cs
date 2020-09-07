@@ -12,6 +12,11 @@
 
         public Piece ReturnPiece(int line, int col) {
             return pieces[line, col];
-        } 
+        }
+        
+        public void PutPiece(Piece p, Position pos) {
+            pieces[pos.line, pos.column] = p;
+            p.postion = pos;
+        }
     }
 }
