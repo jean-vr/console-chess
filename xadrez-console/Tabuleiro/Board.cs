@@ -9,5 +9,9 @@
             columns = col;
             pieces = new Piece[lin, col];
         }
+
+        public Piece ReturnPiece(int line, int col) {
+            return pieces[line, col];
+        } 
     }
 }
