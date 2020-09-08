@@ -16,6 +16,10 @@
             movementQnt++;
         }
 
+        public void DecrementMovementQnt() {
+            movementQnt--;
+        }
+
         public bool IsTherePossibleMovements() {
             bool[,] mat = PossibleMovements();
             for (int i = 0; i < board.lines; i++) {

@@ -9,6 +9,7 @@ namespace Xadrez {
         public bool isFinished { get; private set; }
         private HashSet<Piece> pieces;
         private HashSet<Piece> captured;
+        public bool isInCheck { get; private set; }
 
         public ChessMatch() {
             board = new Board(8, 8);
@@ -17,10 +18,11 @@ namespace Xadrez {
             isFinished = false;
             pieces = new HashSet<Piece>();
             captured = new HashSet<Piece>();
+            isInCheck = false;
             PutPieces();
         }
 
-        public void ExcuteMovement(Position from, Position to) {
+        public Piece ExcuteMovement(Position from, Position to) {
             Piece p = board.RemovePiece(from);
             p.IncrementMovementQnt();
             Piece capturedPiece = board.RemovePiece(to);
@@ -30,12 +32,38 @@ namespace Xadrez {
             if (capturedPiece != null) {
                 captured.Add(capturedPiece);
             }
+
+            return capturedPiece;
         }
 
         public void PerformMove(Position from, Position to) {
-            ExcuteMovement(from, to);
+            Piece capturedPiece = ExcuteMovement(from, to);
+            
+            if (IsInCheck(currentPlayer)) {
+                UndoMovement(from, to, capturedPiece);
+                throw new BoardException("Você não pode se colocar em xeque!");
+            }
+
+            if (IsInCheck(Enemy(currentPlayer))) {
+                isInCheck = true;
+            } else {
+                isInCheck = false;
+            }
+
             turn++;
             ChangePlayer();
+        }
+
+        public void UndoMovement(Position from, Position to, Piece capturedPiece) {
+            Piece p = board.RemovePiece(to);
+            p.DecrementMovementQnt();
+
+            if (capturedPiece != null) {
+                board.PutPiece(capturedPiece, to);
+                captured.Remove(capturedPiece);
+            }
+
+            board.PutPiece(p, from);
         }
 
         public void ValidateOriginPosition(Position pos) {
@@ -77,7 +105,7 @@ namespace Xadrez {
 
         public HashSet<Piece> PiecesInGame(Color c) {
             HashSet<Piece> aux = new HashSet<Piece>();
-            foreach (Piece p in captured) {
+            foreach (Piece p in pieces) {
                 if (p.color == c) {
                     aux.Add(p);
                 }
@@ -87,6 +115,42 @@ namespace Xadrez {
             return aux;
         }
 
+        private Color Enemy(Color c) {
+            if (c == Color.Branca) {
+                return Color.Preta;
+            } else {
+                return Color.Branca;
+            }
+        }
+
+        private Piece ReturnKing(Color c) {
+            foreach (Piece p in PiecesInGame(c)) {
+                if (p is King) {
+                    return p;
+                }
+            }
+
+            return null;
+        }
+
+        public bool IsInCheck(Color c) {
+            Piece K = ReturnKing(c);
+            if (K == null) {
+                throw new BoardException("Não há rei da cor " + c + " no tabuleiro!");
+            }
+
+            foreach (Piece p in PiecesInGame(Enemy(c))) {
+                bool[,] mat = p.PossibleMovements();
+                
+                // Caso dentro das posições possíveis de cada peça exista a posição do Rei
+                if (mat[K.position.line, K.position.column]) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+             
         public void PutNewPiece(char col, int line, Piece p) {
             board.PutPiece(p, new ChessPosition(col, line).ToPosition());
             pieces.Add(p);
