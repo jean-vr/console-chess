@@ -16,6 +16,23 @@
             movementQnt++;
         }
 
+        public bool IsTherePossibleMovements() {
+            bool[,] mat = PossibleMovements();
+            for (int i = 0; i < board.lines; i++) {
+                for (int j = 0; j < board.columns; j++) {
+                    if (mat[i, j]) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+        
+        public bool CanItMoveTo(Position pos) {
+            return PossibleMovements()[pos.line, pos.column];
+        }
+
         public abstract bool[,] PossibleMovements();
     }
 }

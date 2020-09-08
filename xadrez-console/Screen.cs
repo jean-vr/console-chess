@@ -42,7 +42,7 @@ namespace xadrez_console {
             if (p == null) {
                 Console.Write("- ");
             } else {
-                if (p.color == Color.White) {
+                if (p.color == Color.Branca) {
                     Console.Write(p);
                 }
                 else {
