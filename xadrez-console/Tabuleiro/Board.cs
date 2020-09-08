@@ -27,6 +27,17 @@
             p.postion = pos;
         }
 
+        public Piece RemovePiece(Position pos) {
+            if (ReturnPiece(pos) == null) {
+                return null;
+            }
+
+            Piece aux = ReturnPiece(pos);
+            aux.postion = null;
+            pieces[pos.line, pos.column] = null;
+            return aux;
+        }
+
         public bool IsThereAPiece(Position pos) {
             ValidatePostion(pos);
             return ReturnPiece(pos) != null;

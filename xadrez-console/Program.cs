@@ -6,16 +6,21 @@ namespace xadrez_console {
     class Program {
         static void Main(string[] args) {
             try {
-                Board board = new Board(8, 8);
+                ChessMatch match = new ChessMatch();
 
-                board.PutPiece(new Tower(board, Color.Black), new Position(0, 0));
-                board.PutPiece(new Tower(board, Color.Black), new Position(1, 3));
-                board.PutPiece(new King(board, Color.Black), new Position(2, 4));
+                while (!match.isFinished) {
+                    Console.Clear();
+                    Screen.PrintBoard(match.board);
 
-                board.PutPiece(new Tower(board, Color.White), new Position(3, 5));
-                board.PutPiece(new King(board, Color.White), new Position(2, 6));
+                    Console.WriteLine();
+                    Console.Write("Origem: ");
+                    Position from = Screen.ReadChessPosition();
+                    Console.Write("Destino: ");
+                    Position to = Screen.ReadChessPosition();
 
-                Screen.PrintBoard(board);
+                    match.ExcuteMovement(from, to);
+                }
+                
             }
             catch (BoardException e) {
                 Console.WriteLine(e.Message);
