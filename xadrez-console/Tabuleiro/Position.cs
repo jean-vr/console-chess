@@ -7,5 +7,10 @@
             line = lin;
             column = col;
         }
+
+        public void DefineValues(int line, int column) {
+            this.line = line;
+            this.column = column;
+        }
     }
 }

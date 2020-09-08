@@ -24,7 +24,7 @@
             }
 
             pieces[pos.line, pos.column] = p;
-            p.postion = pos;
+            p.position = pos;
         }
 
         public Piece RemovePiece(Position pos) {
@@ -33,7 +33,7 @@
             }
 
             Piece aux = ReturnPiece(pos);
-            aux.postion = null;
+            aux.position = null;
             pieces[pos.line, pos.column] = null;
             return aux;
         }
