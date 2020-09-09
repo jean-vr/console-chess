@@ -50,8 +50,12 @@ namespace Xadrez {
                 isInCheck = false;
             }
 
-            turn++;
-            ChangePlayer();
+            if (CheckMateTest(Enemy(currentPlayer))) {
+                isFinished = true;
+            } else {
+                turn++;
+                ChangePlayer();
+            }     
         }
 
         public void UndoMovement(Position from, Position to, Piece capturedPiece) {
@@ -149,6 +153,34 @@ namespace Xadrez {
             }
 
             return false;
+        }
+
+        public bool CheckMateTest(Color c) {
+            if (!IsInCheck(c)) {
+                return false;
+            }
+
+            foreach (Piece p in PiecesInGame(c)) {
+                bool[,] mat = p.PossibleMovements();
+
+                for (int i = 0; i < board.lines; i++) {
+                    for (int j = 0; j < board.columns; j++) {
+                        if (mat[i, j]) {
+                            Position from = p.position;
+                            Position to = new Position(i, j);
+                            Piece capturedPiece = ExcuteMovement(from, to);
+                            bool checkTest = IsInCheck(c);
+                            UndoMovement(from, to, capturedPiece);
+
+                            if (!checkTest) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
              
         public void PutNewPiece(char col, int line, Piece p) {
