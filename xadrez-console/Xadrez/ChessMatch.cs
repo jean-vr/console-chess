@@ -55,6 +55,22 @@ namespace Xadrez {
                 board.PutPiece(rook, destinyRook);
             }
 
+            // Jogada especial "en passant"
+            if (p is Pawn) {
+                if (from.column != to.column && capturedPiece == null) {
+                    Position posP;
+
+                    if (p.color == Color.Branca) {
+                        posP = new Position(to.line + 1, to.column);
+                    } else {
+                        posP = new Position(to.line - 1, to.column);
+                    }
+
+                    capturedPiece = board.RemovePiece(posP);
+                    captured.Add(capturedPiece);
+                }
+            }
+
             return capturedPiece;
         }
 
@@ -77,7 +93,16 @@ namespace Xadrez {
             } else {
                 turn++;
                 ChangePlayer();
-            }     
+            }
+
+            Piece p = board.ReturnPiece(to);
+
+            // Jogada especial "en passant"
+            if (p is Pawn && (to.line == from.line - 2 || to.line == from.line + 2)) {
+                isVulnerableEnPassant = p;
+            } else {
+                isVulnerableEnPassant = null;
+            }
         }
 
         public void UndoMovement(Position from, Position to, Piece capturedPiece) {
@@ -109,6 +134,22 @@ namespace Xadrez {
                 Piece rook = board.RemovePiece(destinyRook);
                 rook.DecrementMovementQnt();
                 board.PutPiece(rook, originRook);
+            }
+
+            // Jogada especial "en passant"
+            if (p is Pawn) {
+                if (from.column != to.column && capturedPiece == isVulnerableEnPassant) {
+                    Piece pawn = board.RemovePiece(to);
+                    Position posP;
+
+                    if (p.color == Color.Branca) {
+                        posP = new Position(3, to.column);
+                    } else {
+                        posP = new Position(4, to.column);
+                    }
+
+                    board.PutPiece(pawn, posP);
+                }
             }
         }
 
