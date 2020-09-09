@@ -1,64 +1,56 @@
 ﻿using Tabuleiro;
 
 namespace Xadrez {
-    class Tower : Piece {
-        public Tower(Board b, Color c) : base(b, c) { }
+    class Bishop : Piece {
+        public Bishop(Board board, Color color) : base(board, color) { }
 
         public override string ToString() {
-            return "T";
-        }
-
-        private bool CanItMove(Position pos) {
-            Piece p = board.ReturnPiece(pos);
-            return p == null || p.color != color;
+            return "B";
         }
 
         public override bool[,] PossibleMovements() {
             bool[,] mat = new bool[board.lines, board.columns];
+
             Position pos = new Position(0, 0);
 
-            // Acima
-            pos.DefineValues(position.line - 1, position.column);
-            while (board.IsValidPosition(pos) && CanItMove(pos)) {
+            // NO
+            pos.DefineValues(position.line - 1, position.column - 1);
+            while (board.IsValidPosition(pos) && CanPieceMove(pos)) {
                 mat[pos.line, pos.column] = true;
-
                 if (board.ReturnPiece(pos) != null && board.ReturnPiece(pos).color != color) {
                     break;
                 }
-                pos.line--;
+                pos.DefineValues(pos.line - 1, pos.column - 1);
             }
 
-            // Abaixo
-            pos.DefineValues(position.line + 1, position.column);
-            while (board.IsValidPosition(pos) && CanItMove(pos)) {
+            // NE
+            pos.DefineValues(position.line - 1, position.column + 1);
+            while (board.IsValidPosition(pos) && CanPieceMove(pos)) {
                 mat[pos.line, pos.column] = true;
-
                 if (board.ReturnPiece(pos) != null && board.ReturnPiece(pos).color != color) {
                     break;
                 }
-                pos.line++;
+                pos.DefineValues(pos.line - 1, pos.column + 1);
             }
 
-            // Direita
-            pos.DefineValues(position.line, position.column + 1);
-            while (board.IsValidPosition(pos) && CanItMove(pos)) {
+            // SE
+            pos.DefineValues(position.line + 1, position.column + 1);
+            while (board.IsValidPosition(pos) && CanPieceMove(pos)) {
                 mat[pos.line, pos.column] = true;
-
                 if (board.ReturnPiece(pos) != null && board.ReturnPiece(pos).color != color) {
                     break;
                 }
-                pos.column++;
+                pos.DefineValues(pos.line + 1, pos.column + 1);
             }
 
-            // Esquerda
-            pos.DefineValues(position.line, position.column - 1);
-            while (board.IsValidPosition(pos) && CanItMove(pos)) {
+            // SO
+            pos.DefineValues(position.line + 1, position.column - 1);
+            while (board.IsValidPosition(pos) && CanPieceMove(pos)) {
                 mat[pos.line, pos.column] = true;
-
                 if (board.ReturnPiece(pos) != null && board.ReturnPiece(pos).color != color) {
                     break;
                 }
-                pos.column--;
+                pos.DefineValues(pos.line + 1, pos.column - 1);
             }
 
             return mat;

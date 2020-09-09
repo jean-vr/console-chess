@@ -32,6 +32,11 @@
 
             return false;
         }
+
+        protected bool CanPieceMove(Position pos) {
+            Piece p = board.ReturnPiece(pos);
+            return p == null || p.color != color;
+        }
         
         public bool CanItMoveTo(Position pos) {
             return PossibleMovements()[pos.line, pos.column];

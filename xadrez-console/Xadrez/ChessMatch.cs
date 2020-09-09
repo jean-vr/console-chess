@@ -10,6 +10,7 @@ namespace Xadrez {
         private HashSet<Piece> pieces;
         private HashSet<Piece> captured;
         public bool isInCheck { get; private set; }
+        public Piece isVulnerableEnPassant { get; private set; }
 
         public ChessMatch() {
             board = new Board(8, 8);
@@ -19,6 +20,7 @@ namespace Xadrez {
             pieces = new HashSet<Piece>();
             captured = new HashSet<Piece>();
             isInCheck = false;
+            isVulnerableEnPassant = null;
             PutPieces();
         }
 
@@ -140,13 +142,13 @@ namespace Xadrez {
         public bool IsInCheck(Color c) {
             Piece K = ReturnKing(c);
             if (K == null) {
-                throw new BoardException("Não há rei da cor " + c + " no tabuleiro!");
+                throw new BoardException("Não há King da cor " + c + " no tabuleiro!");
             }
 
             foreach (Piece p in PiecesInGame(Enemy(c))) {
                 bool[,] mat = p.PossibleMovements();
                 
-                // Caso dentro das posições possíveis de cada peça exista a posição do Rei
+                // Caso dentro das posições possíveis de cada peça exista a posição do King
                 if (mat[K.position.line, K.position.column]) {
                     return true;
                 }
@@ -189,19 +191,39 @@ namespace Xadrez {
         }
 
         private void PutPieces() {
-            PutNewPiece('c', 1, new Tower(board, Color.Branca));
-            PutNewPiece('c', 2, new Tower(board, Color.Branca));
-            PutNewPiece('d', 2, new Tower(board, Color.Branca));
-            PutNewPiece('e', 2, new Tower(board, Color.Branca));
-            PutNewPiece('e', 1, new Tower(board, Color.Branca));
-            PutNewPiece('d', 1, new King(board, Color.Branca));
+            PutNewPiece('a', 1, new Rook(board, Color.Branca));
+            PutNewPiece('b', 1, new Knight(board, Color.Branca));
+            PutNewPiece('c', 1, new Bishop(board, Color.Branca));
+            PutNewPiece('d', 1, new Queen(board, Color.Branca));
+            PutNewPiece('e', 1, new King(board, Color.Branca));
+            PutNewPiece('f', 1, new Bishop(board, Color.Branca));
+            PutNewPiece('g', 1, new Knight(board, Color.Branca));
+            PutNewPiece('h', 1, new Rook(board, Color.Branca));
+            PutNewPiece('a', 2, new Pawn(board, Color.Branca, this));
+            PutNewPiece('b', 2, new Pawn(board, Color.Branca, this));
+            PutNewPiece('c', 2, new Pawn(board, Color.Branca, this));
+            PutNewPiece('d', 2, new Pawn(board, Color.Branca, this));
+            PutNewPiece('e', 2, new Pawn(board, Color.Branca, this));
+            PutNewPiece('f', 2, new Pawn(board, Color.Branca, this));
+            PutNewPiece('g', 2, new Pawn(board, Color.Branca, this));
+            PutNewPiece('h', 2, new Pawn(board, Color.Branca, this));
 
-            PutNewPiece('c', 7, new Tower(board, Color.Preta));
-            PutNewPiece('c', 8, new Tower(board, Color.Preta));
-            PutNewPiece('d', 7, new Tower(board, Color.Preta));
-            PutNewPiece('e', 7, new Tower(board, Color.Preta));
-            PutNewPiece('e', 8, new Tower(board, Color.Preta));
-            PutNewPiece('d', 8, new King(board, Color.Preta));
+            PutNewPiece('a', 8, new Rook(board, Color.Preta));
+            PutNewPiece('b', 8, new Knight(board, Color.Preta));
+            PutNewPiece('c', 8, new Bishop(board, Color.Preta));
+            PutNewPiece('d', 8, new Queen(board, Color.Preta));
+            PutNewPiece('e', 8, new King(board, Color.Preta));
+            PutNewPiece('f', 8, new Bishop(board, Color.Preta));
+            PutNewPiece('g', 8, new Knight(board, Color.Preta));
+            PutNewPiece('h', 8, new Rook(board, Color.Preta));
+            PutNewPiece('a', 7, new Pawn(board, Color.Preta, this));
+            PutNewPiece('b', 7, new Pawn(board, Color.Preta, this));
+            PutNewPiece('c', 7, new Pawn(board, Color.Preta, this));
+            PutNewPiece('d', 7, new Pawn(board, Color.Preta, this));
+            PutNewPiece('e', 7, new Pawn(board, Color.Preta, this));
+            PutNewPiece('f', 7, new Pawn(board, Color.Preta, this));
+            PutNewPiece('g', 7, new Pawn(board, Color.Preta, this));
+            PutNewPiece('h', 7, new Pawn(board, Color.Preta, this));
         }
     }
 }

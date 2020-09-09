@@ -1,66 +1,60 @@
 ﻿using Tabuleiro;
 
 namespace Xadrez {
-    class King : Piece {
-        public King(Board b, Color c) : base(b, c) {}
+    class Knight : Piece {
+        public Knight(Board board, Color color) : base(board, color) { }
 
         public override string ToString() {
-            return "R";
+            return "C";
         }
 
         public override bool[,] PossibleMovements() {
             bool[,] mat = new bool[board.lines, board.columns];
+
             Position pos = new Position(0, 0);
 
-            // Acima
-            pos.DefineValues(position.line - 1, position.column);
+            pos.DefineValues(position.line - 1, position.column - 2);
             if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
                 mat[pos.line, pos.column] = true;
             }
 
-            // Nordeste
-            pos.DefineValues(position.line - 1, position.column + 1);
-            if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
-                mat[pos.line, pos.column] = true;
-            }
-
-            // Direita
-            pos.DefineValues(position.line, position.column + 1);
-            if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
-                mat[pos.line, pos.column] = true;
-            }
-
-            // Sudeste
-            pos.DefineValues(position.line + 1, position.column + 1);
-            if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
-                mat[pos.line, pos.column] = true;
-            }
-
-            // Abaixo
-            pos.DefineValues(position.line + 1, position.column);
-            if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
-                mat[pos.line, pos.column] = true;
-            }
-
-            // Sudoeste
             pos.DefineValues(position.line - 1, position.column - 1);
             if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
                 mat[pos.line, pos.column] = true;
             }
 
-            // Esquerda
-            pos.DefineValues(position.line, position.column - 1);
+            pos.DefineValues(position.line - 2, position.column + 1);
             if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
                 mat[pos.line, pos.column] = true;
             }
 
-            // Noroeste
-            pos.DefineValues(position.line - 1, position.column - 1);
+            pos.DefineValues(position.line - 1, position.column + 2);
+            if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
+                mat[pos.line, pos.column] = true;
+            }
+
+            pos.DefineValues(position.line + 1, position.column + 2);
+            if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
+                mat[pos.line, pos.column] = true;
+            }
+
+            pos.DefineValues(position.line + 2, position.column + 1);
+            if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
+                mat[pos.line, pos.column] = true;
+            }
+
+            pos.DefineValues(position.line + 2, position.column - 1);
+            if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
+                mat[pos.line, pos.column] = true;
+            }
+
+            pos.DefineValues(position.line + 1, position.column - 2);
             if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
                 mat[pos.line, pos.column] = true;
             }
 
             return mat;
         }
+
     }
 }
