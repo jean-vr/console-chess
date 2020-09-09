@@ -82,6 +82,20 @@ namespace Xadrez {
                 throw new BoardException("Você não pode se colocar em xeque!");
             }
 
+            Piece p = board.ReturnPiece(to);
+
+            // Jogada especial "promoção"
+            if (p is Pawn) {
+                if ((p.color == Color.Branca && to.line == 0) || (p.color == Color.Preta && to.line == 7)) {
+                    p = board.RemovePiece(to);
+                    pieces.Remove(p);
+
+                    Piece queen = new Queen(board, p.color);
+                    board.PutPiece(queen, to);
+                    pieces.Add(queen);
+                }
+            }
+
             if (IsInCheck(Enemy(currentPlayer))) {
                 isInCheck = true;
             } else {
@@ -94,8 +108,6 @@ namespace Xadrez {
                 turn++;
                 ChangePlayer();
             }
-
-            Piece p = board.ReturnPiece(to);
 
             // Jogada especial "en passant"
             if (p is Pawn && (to.line == from.line - 2 || to.line == from.line + 2)) {
