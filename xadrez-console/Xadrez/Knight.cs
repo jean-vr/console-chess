@@ -18,7 +18,7 @@ namespace Xadrez {
                 mat[pos.line, pos.column] = true;
             }
 
-            pos.DefineValues(position.line - 1, position.column - 1);
+            pos.DefineValues(position.line - 2, position.column - 1);
             if (board.IsValidPosition(pos) && CanPieceMove(pos)) {
                 mat[pos.line, pos.column] = true;
             }

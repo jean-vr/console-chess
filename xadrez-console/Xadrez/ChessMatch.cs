@@ -35,6 +35,26 @@ namespace Xadrez {
                 captured.Add(capturedPiece);
             }
 
+            // Jogada especial "roque pequeno"
+            if (p is King && to.column == from.column + 2) {
+                Position originRook = new Position(from.line, from.column + 3);
+                Position destinyRook = new Position(from.line, from.column + 1);
+
+                Piece rook = board.RemovePiece(originRook);
+                rook.IncrementMovementQnt();
+                board.PutPiece(rook, destinyRook);
+            }
+
+            // Jogada especial "roque grande"
+            if (p is King && to.column == from.column - 2) {
+                Position originRook = new Position(from.line, from.column - 4);
+                Position destinyRook = new Position(from.line, from.column - 1);
+
+                Piece rook = board.RemovePiece(originRook);
+                rook.IncrementMovementQnt();
+                board.PutPiece(rook, destinyRook);
+            }
+
             return capturedPiece;
         }
 
@@ -70,6 +90,26 @@ namespace Xadrez {
             }
 
             board.PutPiece(p, from);
+
+            // Jogada especial "roque pequeno"
+            if (p is King && to.column == from.column + 2) {
+                Position originRook = new Position(from.line, from.column + 3);
+                Position destinyRook = new Position(from.line, from.column + 1);
+
+                Piece rook = board.RemovePiece(destinyRook);
+                rook.DecrementMovementQnt();
+                board.PutPiece(rook, originRook);
+            }
+
+            // Jogada especial "roque grande"
+            if (p is King && to.column == from.column - 2) {
+                Position originRook = new Position(from.line, from.column - 4);
+                Position destinyRook = new Position(from.line, from.column - 1);
+
+                Piece rook = board.RemovePiece(destinyRook);
+                rook.DecrementMovementQnt();
+                board.PutPiece(rook, originRook);
+            }
         }
 
         public void ValidateOriginPosition(Position pos) {
@@ -195,7 +235,7 @@ namespace Xadrez {
             PutNewPiece('b', 1, new Knight(board, Color.Branca));
             PutNewPiece('c', 1, new Bishop(board, Color.Branca));
             PutNewPiece('d', 1, new Queen(board, Color.Branca));
-            PutNewPiece('e', 1, new King(board, Color.Branca));
+            PutNewPiece('e', 1, new King(board, Color.Branca, this));
             PutNewPiece('f', 1, new Bishop(board, Color.Branca));
             PutNewPiece('g', 1, new Knight(board, Color.Branca));
             PutNewPiece('h', 1, new Rook(board, Color.Branca));
@@ -212,7 +252,7 @@ namespace Xadrez {
             PutNewPiece('b', 8, new Knight(board, Color.Preta));
             PutNewPiece('c', 8, new Bishop(board, Color.Preta));
             PutNewPiece('d', 8, new Queen(board, Color.Preta));
-            PutNewPiece('e', 8, new King(board, Color.Preta));
+            PutNewPiece('e', 8, new King(board, Color.Preta, this));
             PutNewPiece('f', 8, new Bishop(board, Color.Preta));
             PutNewPiece('g', 8, new Knight(board, Color.Preta));
             PutNewPiece('h', 8, new Rook(board, Color.Preta));
